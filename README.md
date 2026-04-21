@@ -226,7 +226,7 @@ ZidiuUI:HideTooltip()
 
 ```lua
 -- Load the library
-local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/zidiu5/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
+local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
 
 -- Create window
 local mainWin = ZidiuUI:CreateWindow("My Super Tool v2.4")
@@ -331,5 +331,5 @@ ZidiuUI:HideTooltip()
 **Load it in one line and start building!**
 
 ```lua
-local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/zidiu5/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
+local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
 ```
