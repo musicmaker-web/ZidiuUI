@@ -10,7 +10,7 @@
 Add this to your script:
 
 ```lua
-local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
+local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
 ```
 
 That's it! No downloading, no ModuleScript creation.
