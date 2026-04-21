@@ -10,7 +10,7 @@
 Add this to your script:
 
 ```lua
-local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
+local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
 ```
 
 That's it! No downloading, no ModuleScript creation.
@@ -226,7 +226,7 @@ ZidiuUI:HideTooltip()
 
 ```lua
 -- Load the library
-local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
+local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
 
 -- Create window
 local mainWin = ZidiuUI:CreateWindow("My Super Tool v2.4")
@@ -331,5 +331,5 @@ ZidiuUI:HideTooltip()
 **Load it in one line and start building!**
 
 ```lua
-local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
+local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
 ```
