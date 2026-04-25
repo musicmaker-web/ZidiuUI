@@ -1,335 +1,302 @@
-# ZidiuUI – Modern UI Library for Roblox Executors
+# ZidiuUI Documentation
 
-**ZidiuUI** is a powerful, modern UI framework designed for Roblox executors (like Rayfield, Kavo, etc.). It provides an intuitive API for creating windows, tabs, sections, and interactive elements with elegant design, touch support, and many useful features.
+## Introduction
+ZidiuUI is a modern, fully-featured UI framework for Roblox. With its sleek gradient design, smooth animations, and a wide range of components, ZidiuUI provides a professional interface for your scripts. The library is obfuscated and loaded via loadstring—no ModuleScript required.
 
-> **⚠️ Important:** This library is **obfuscated** and meant to be used as an **external library** (like Rayfield or Kavo). You **DO NOT** need to download it.
----
-
-## 📦 Installation (One Line)
-
-Add this to your script:
-
+## Getting Loadstring
 ```lua
 local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
 ```
 
-That's it! No downloading, no ModuleScript creation.
-
----
-
-## 🚀 Complete API Reference
-
-### 1. Create Window – `ZidiuUI:CreateWindow(title)`
-Creates the main window with animated background and controls (Resize, Drag, Keybind toggle, FAB).
-
+## Creating a UI Window
 ```lua
-local Window = ZidiuUI:CreateWindow("My Admin Tool")
+local Window = ZidiuUI:CreateWindow("My Awesome Script")
 ```
 
----
-
-### 2. Create Tab – `Window:CreateTab(name, icon)`
-Adds a tab with name and optional icon (default: "•").
-
+## Creating a Tab
 ```lua
-local PlayerTab = Window:CreateTab("Players", "👤")
-local SettingsTab = Window:CreateTab("Settings", "⚙️")
+local Tab = Window:CreateTab("Home", "🏠")
 ```
 
----
-
-### 3. Create Section – `Tab:CreateSection(name)`
-A collapsible section with green border for grouping elements.
-
+## Creating a Section
 ```lua
-local CombatSection = PlayerTab:CreateSection("Combat Settings")
+local Section = Tab:CreateSection("Player Settings")
 ```
 
----
+## Components
 
-### 4. Button – `Section:CreateButton(text, callback)`
-Clickable button with animations and flash effect.
-
+### Button
 ```lua
-local btn = CombatSection:CreateButton("Teleport to Me", function()
-    ZidiuUI:Notify("Teleport executed!", "success", 2)
+local Button = Section:CreateButton("Click Me!", function()
+    print("Button clicked!")
+    ZidiuUI:Notify("Button was clicked", "success", 2)
+end)
+```
+
+### Toggle
+```lua
+local Toggle = Section:CreateToggle("Auto Sprint", true, function(state)
+    print("Toggle state:", state)
 end)
 
-btn:SetTooltip("Teleports everyone to your location")
+-- Update toggle state programmatically
+Toggle:SetState(false)
 ```
 
----
-
-### 5. Toggle – `Section:CreateToggle(text, default, callback)`
-Switch with green/red state and animated knob.
-
+### Dropdown
 ```lua
-local godToggle = CombatSection:CreateToggle("Godmode", false, function(state)
-    print("Godmode:", state)
-end)
-
--- Change later
-godToggle:SetState(true)
-print(godToggle:GetState()) -- true
-```
-
----
-
-### 6. Dropdown (Single) – `Section:CreateDropdown(text, options, callback)`
-Select one option from a list. Refreshable with `:Refresh()`.
-
-```lua
-local weaponDD = CombatSection:CreateDropdown("Weapon", {"Sword", "Bow", "Axe"}, function(selected)
+local Dropdown = Section:CreateDropdown("Select Weapon", {"Knife", "Pistol", "Rifle"}, function(selected)
     print("Selected:", selected)
 end)
 
--- Update options later
-weaponDD:Refresh({"Sword", "Hammer", "Spear"}, "Hammer")
-print(weaponDD:GetValue()) -- "Hammer"
+-- Refresh dropdown options
+Dropdown:Refresh({"Sword", "Bow", "Axe"}, "Bow")
 ```
 
----
-
-### 7. Multi-Dropdown – `Section:CreateMultiDropdown(text, options, callback)`
-Select multiple options (checkboxes). Returns a table of selected values.
-
+### Multi Dropdown
 ```lua
-local effectsDD = CombatSection:CreateMultiDropdown("Effects", {"Fire", "Lightning", "Ice"}, function(selectedTable)
-    print(table.concat(selectedTable, ", "))
+local MultiDropdown = Section:CreateMultiDropdown("Select Players", {"Player1", "Player2", "Player3"}, function(selected)
+    print("Selected players:", table.concat(selected, ", "))
 end)
 
-effectsDD:Refresh({"Fire", "Poison", "Stun"}, {"Fire", "Stun"})
+-- Refresh multi-dropdown options
+MultiDropdown:Refresh({"Ally1", "Ally2", "Ally3"}, {"Ally1", "Ally3"})
 ```
 
----
-
-### 8. Textbox – `Section:CreateTextbox(label, placeholder, callback)`
-Text input with 0.5 second debounce.
-
+### Textbox
 ```lua
-local nameBox = SettingsTab:CreateSection("General"):CreateTextbox("Username", "Enter name...", function(text)
-    print("New name:", text)
+local Textbox = Section:CreateTextbox("Enter Message", "Type here...", function(text)
+    print("User typed:", text)
 end)
 
-nameBox:SetText("Player123")
-print(nameBox:GetText()) -- "Player123"
+-- Set text programmatically
+Textbox:SetText("Hello World!")
 ```
 
----
-
-### 9. Slider – `Section:CreateSlider(text, min, max, default, callback)`
-Numeric slider with live value display.
-
+### Slider
 ```lua
-local dmgSlider = CombatSection:CreateSlider("Damage Multiplier", 0, 10, 5, function(value)
-    print("Multiplier:", value)
+local Slider = Section:CreateSlider("Walk Speed", 16, 100, 16, function(value)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+end)
+```
+
+### Dual Slider
+```lua
+local DualSlider = Section:CreateDualSlider("Range Filter", 0, 100, 20, 80, function(min, max)
+    print("Range:", min, "-", max)
 end)
 
-dmgSlider:SetValue(7.5)
-print(dmgSlider:GetValue()) -- 7.5
+-- Get current values
+print(DualSlider:GetMin(), DualSlider:GetMax())
+
+-- Set range programmatically
+DualSlider:SetRange(30, 70)
 ```
 
----
-
-### 10. Keybind – `Section:CreateKeybind(text, defaultKey, callback)`
-Assign a keyboard shortcut. Callback receives key and modifiers (Shift, Ctrl, Alt).
-
+### Keybind
 ```lua
-local flyKey = SettingsTab:CreateSection("Controls"):CreateKeybind("Fly", Enum.KeyCode.F, function(key, modifiers)
-    print("Key:", key, "Shift?", modifiers.shift)
+local Keybind = Section:CreateKeybind("Teleport Key", Enum.KeyCode.T, function(key, modifiers)
+    print("Key pressed:", key, "Shift:", modifiers.shift, "Ctrl:", modifiers.ctrl)
 end)
 
-flyKey:SetKey(Enum.KeyCode.G)
-print(flyKey:GetKey()) -- Enum.KeyCode.G
-flyKey:SetTooltip("Press this key to toggle flying")
+-- Get current key
+print(Keybind:GetKey())
+
+-- Set key programmatically
+Keybind:SetKey(Enum.KeyCode.Q)
 ```
 
----
-
-### 11. Label – `Section:CreateLabel(text)`
-Static or dynamic text. Use `:SetText()` to update.
-
+### Label
 ```lua
-local infoLabel = CombatSection:CreateLabel("Current status: Ready")
-infoLabel:SetText("Current status: In Combat")
-print(infoLabel:GetText()) -- "Current status: In Combat"
+local Label = Section:CreateLabel("Status: Idle")
+
+-- Update label text
+Label:SetText("Status: Active")
 ```
 
----
-
-### 12. Search Dropdown – `Section:CreateSearchDropdown(label, options, callback, multi)`
-Dropdown with live search – perfect for long lists. `multi` (true/false) controls single/multi selection.
-
+### Search Dropdown
 ```lua
-local searchDD = SettingsTab:CreateSection("Advanced"):CreateSearchDropdown("Search Player", {"Alex", "Ben", "Clara"}, function(selected)
+local SearchDropdown = Section:CreateSearchDropdown("Search Player", {"Alice", "Bob", "Charlie"}, function(selected)
     print("Selected:", selected)
-end, false) -- false = single selection
+end, true) -- 'true' enables multi-select mode
+
+-- Get selected items
+local selected = SearchDropdown:GetSelected()
+
+-- Set new options
+SearchDropdown:SetOptions({"David", "Eve", "Frank"})
+
+-- Clear search field
+SearchDropdown:ClearSearch()
 ```
 
----
-
-### 13. Dual Slider (Range) – `Section:CreateDualSlider(label, min, max, defaultMin, defaultMax, callback)`
-Range slider with two knobs for min/max values.
+### ExLabel (Independent Window)
+The ExLabel creates a completely independent, floating text window with its own ScreenGui. Perfect for displaying logs, help texts, or any information you want to keep visible separately from the main UI.
 
 ```lua
-local rangeSlider = SettingsTab:CreateSection("Advanced"):CreateDualSlider("Level Range", 1, 100, 10, 50, function(minVal, maxVal)
-    print("Min:", minVal, "Max:", maxVal)
-end)
+local InfoWindow = Section:CreateExLabel("Script Logs", "Initializing script...\nLoading modules...\nReady!")
+
+-- Update content
+InfoWindow:SetText("New log entry:\nSomething happened!")
+
+-- Change title
+InfoWindow:SetTitle("System Console")
+
+-- Show/hide window
+InfoWindow:Open()
+InfoWindow:Close()
+
+-- Bring window to front
+InfoWindow:Focus()
+
+-- Destroy window completely
+InfoWindow:Destroy()
 ```
 
----
-
-### 14. Tooltip – `element:SetTooltip(text)`
-Adds a "?" button next to the element that shows a tooltip when clicked.
-
+### Tooltip
 ```lua
-local btn = CombatSection:CreateButton("Special Attack", function() end)
-btn:SetTooltip("Performs a powerful area attack (30 second cooldown)")
+local Button = Section:CreateButton("Settings", function() end)
+Button:SetTooltip("Click to open settings menu")
 ```
 
----
+## Global Functions
 
-### 15. Toast Notification – `ZidiuUI:Notify(message, type, duration)`
-Shows a fading notification. Types: `"info"`, `"success"`, `"error"`, `"warning"`. Duration in seconds.
-
+### Notify (Toast Notification)
 ```lua
-ZidiuUI:Notify("Welcome to the hub!", "success", 3)
-ZidiuUI:Notify("Connection failed", "error", 5)
-ZidiuUI:Notify("Server restart in 10 seconds", "warning", 4)
+-- Types: "info", "success", "error", "warning"
+ZidiuUI:Notify("Operation completed successfully!", "success", 3)
+ZidiuUI:Notify("Something went wrong!", "error", 4)
 ```
 
----
-
-### 16. Toast Position – `ZidiuUI:SetToastPosition(pos)`
-Available positions: `"bottom-right"` (default), `"bottom-center"`, `"top-center"`.
-
+### Set Toast Position
 ```lua
-ZidiuUI:SetToastPosition("top-center")
+ZidiuUI:SetToastPosition("bottom-center")  -- "bottom-center", "bottom-right", "top-center"
 ```
 
----
-
-### 17. Manual Tooltip – `ZidiuUI:ShowTooltip(text, position)` & `ZidiuUI:HideTooltip()`
-Shows a freely positionable tooltip at a screen coordinate (Vector2).
-
-```lua
--- Show tooltip
-ZidiuUI:ShowTooltip("This is a hint", Vector2.new(200, 300))
-
--- Hide later
-ZidiuUI:HideTooltip()
-```
-
----
-
-## 🧪 Complete Demo Script
-
+## Complete Demo Script
 ```lua
 -- Load the library
 local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
 
--- Create window
-local mainWin = ZidiuUI:CreateWindow("My Super Tool v2.4")
+-- Create main window
+local Window = ZidiuUI:CreateWindow("ZidiuUI Demo")
 
--- Create tabs
-local combatTab = mainWin:CreateTab("Combat", "⚔️")
-local settingsTab = mainWin:CreateTab("Settings", "⚙️")
-local infoTab = mainWin:CreateTab("Info", "ℹ️")
+-- ==== Player Tab ====
+local PlayerTab = Window:CreateTab("Player", "👤")
+local PlayerSection = PlayerTab:CreateSection("Movement Settings")
 
--- === COMBAT SECTION ===
-local combatSec = combatTab:CreateSection("Combat Options")
-
-local attackBtn = combatSec:CreateButton("Attack", function()
-    ZidiuUI:Notify("You attacked!", "success", 2)
-end)
-attackBtn:SetTooltip("Performs a normal attack")
-
-local critToggle = combatSec:CreateToggle("Critical Strike", true, function(state)
-    print("Critical:", state)
+-- Walk speed slider
+local SpeedSlider = PlayerSection:CreateSlider("Walk Speed", 16, 200, 16, function(value)
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("Humanoid") then
+        char.Humanoid.WalkSpeed = value
+    end
+    StatusLabel:SetText("Walk Speed: " .. value)
 end)
 
-local damageSlider = combatSec:CreateSlider("Damage", 1, 100, 50, function(val)
-    print("Damage:", val)
+-- Jump power slider
+local JumpSlider = PlayerSection:CreateSlider("Jump Power", 50, 150, 50, function(value)
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("Humanoid") then
+        char.Humanoid.JumpPower = value
+    end
 end)
 
-local weaponDD = combatSec:CreateDropdown("Weapon", {"Sword", "Axe", "Bow"}, function(sel)
-    print("Weapon:", sel)
+-- Auto sprint toggle
+local SprintToggle = PlayerSection:CreateToggle("Auto Sprint", false, function(state)
+    if state then
+        SpeedSlider:SetValue(200)
+        ZidiuUI:Notify("Auto Sprint enabled", "success", 2)
+    else
+        SpeedSlider:SetValue(16)
+        ZidiuUI:Notify("Auto Sprint disabled", "info", 2)
+    end
 end)
 
--- === SETTINGS SECTION ===
-local settingsSec = settingsTab:CreateSection("UI Controls")
+-- Status label
+local StatusLabel = PlayerSection:CreateLabel("Walk Speed: 16")
 
-local flyKeybind = settingsSec:CreateKeybind("Fly", Enum.KeyCode.F, function(key, mod)
-    ZidiuUI:Notify("Fly toggled!", "info", 2)
-end)
-flyKeybind:SetTooltip("Press this key to toggle flying")
+-- ==== Teleport Tab ====
+local TeleportTab = Window:CreateTab("Teleport", "📍")
+local TeleportSection = TeleportTab:CreateSection("Waypoints")
 
-local posDropdown = settingsSec:CreateDropdown("Toast Position", {"bottom-right", "bottom-center", "top-center"}, function(pos)
-    ZidiuUI:SetToastPosition(pos)
-    ZidiuUI:Notify("Position changed to " .. pos, "info", 2)
-end)
-
-local nameBox = settingsSec:CreateTextbox("Player Name", "Enter new name...", function(txt)
-    print("New name:", txt)
+-- Waypoint selection dropdown
+local Waypoints = {"Spawn", "Shop", "Arena", "Lobby"}
+local WaypointDropdown = TeleportSection:CreateDropdown("Select Waypoint", Waypoints, function(selected)
+    TeleportLabel:SetText("Selected: " .. selected)
 end)
 
--- Search dropdown example
-local searchSec = settingsTab:CreateSection("Advanced")
-local searchDD = searchSec:CreateSearchDropdown("Search Player", {"Alex", "Ben", "Clara", "David", "Emma"}, function(selected)
-    print("Selected player:", selected)
-end, false)
-
--- Dual slider example
-local rangeSlider = searchSec:CreateDualSlider("Level Range", 1, 100, 10, 50, function(minVal, maxVal)
-    print("Level range:", minVal, "-", maxVal)
+-- Teleport button
+local TeleportButton = TeleportSection:CreateButton("Teleport", function()
+    local selected = WaypointDropdown:GetValue()
+    ZidiuUI:Notify("Teleporting to " .. selected .. "...", "info", 2)
+    -- Teleport logic here
+    TeleportLabel:SetText("Teleported to: " .. selected)
 end)
 
--- === INFO SECTION ===
-local infoSec = infoTab:CreateSection("About This Tool")
-infoSec:CreateLabel("Version 2.4")
-infoSec:CreateLabel("Built with ZidiuUI")
-infoSec:CreateButton("Visit GitHub", function()
-    ZidiuUI:Notify("https://github.com/zidiu5/ZidiuUI", "info", 4)
+-- Teleport status label
+local TeleportLabel = TeleportSection:CreateLabel("No waypoint selected")
+
+-- ==== Combat Tab ====
+local CombatTab = Window:CreateTab("Combat", "⚔️")
+local CombatSection = CombatTab:CreateSection("Weapons")
+
+-- Weapon selection (multi)
+local Weapons = {"Sword", "Bow", "Staff", "Dagger"}
+local WeaponSelect = CombatSection:CreateMultiDropdown("Select Weapons", Weapons, function(selected)
+    CombatLabel:SetText("Equipped weapons: " .. table.concat(selected, ", "))
 end)
 
--- Show manual tooltip as welcome message
-task.wait(2)
-ZidiuUI:ShowTooltip("Welcome! Click the '?' buttons for help.", Vector2.new(100, 100))
-task.wait(5)
-ZidiuUI:HideTooltip()
+-- Combat toggle
+local CombatToggle = CombatSection:CreateToggle("Auto Attack", false, function(state)
+    if state then
+        ZidiuUI:Notify("Auto Attack ENABLED", "warning", 2)
+    else
+        ZidiuUI:Notify("Auto Attack DISABLED", "info", 2)
+    end
+end)
+
+local CombatLabel = CombatSection:CreateLabel("Select weapons above")
+
+-- ==== Info Tab ====
+local InfoTab = Window:CreateTab("Info", "ℹ️")
+local InfoSection = InfoTab:CreateSection("Script Information")
+
+-- Info button with tooltip
+local InfoButton = InfoSection:CreateButton("Show Credits", function()
+    local CreditsWindow = InfoSection:CreateExLabel("Credits", 
+        "ZidiuUI v2.5\n\nCreated by: Zidiu\n\n" ..
+        "Components:\n✓ ExLabel Windows\n✓ Search Dropdowns\n✓ Dual Sliders\n✓ Keybinds\n" ..
+        "✓ Toast Notifications\n✓ Tooltip System"
+    )
+    CreditsWindow:Open()
+end)
+InfoButton:SetTooltip("Click to view script credits and version info")
+
+-- Help ExLabel
+local HelpWindow = InfoSection:CreateExLabel("Help & Tips", 
+    "Welcome to ZidiuUI Demo!\n\n" ..
+    "Tips:\n" ..
+    "• Use '⊞ Resize' to toggle window resizing\n" ..
+    "• Use '⤢ Move O/C' to move the FAB button\n" ..
+    "• Use '✥ Move UI' to move the entire window\n" ..
+    "• Click '?' buttons for tooltips\n" ..
+    "• Toast notifications appear at bottom-right\n\n" ..
+    "The Changelog tab (📋) is automatically created!"
+)
+
+InfoSection:CreateButton("Open Help Window", function()
+    HelpWindow:Open()
+end)
+
+-- Show welcome notification
+ZidiuUI:Notify("Welcome to ZidiuUI Demo!", "success", 3)
+ZidiuUI:SetToastPosition("bottom-right")
 ```
 
----
-
-## 📌 Important Notes
-
-- The **Changelog Tab** is **automatically added** as the last tab – you don't need to create it yourself.
-- All UI elements are **touch-compatible** (drag, resize, sliders, buttons).
-- The **global keybind functionality** can be toggled on/off using the `⌨ Keybinds` button in the TopBar.
-- Window controls: `⊞ Resize` (toggle resize handle), `⤢ Move O/C` (move FAB), `✥ Move UI` (move window).
-- This library is **obfuscated** – do not attempt to modify it directly. Use the API as documented.
-
----
-
-## 🆚 Compared to Other Libraries
-
-| Feature | ZidiuUI | Rayfield | Kavo |
-|---------|---------|----------|------|
-| Touch Support | ✅ Full | ❌ Limited | ❌ No |
-| Dual Slider | ✅ Yes | ❌ No | ❌ No |
-| Search Dropdown | ✅ Yes | ❌ No | ❌ No |
-| Toast Notifications | ✅ Yes | ❌ No | ❌ No |
-| Keybinds with Modifiers | ✅ Yes | ✅ Yes | ❌ No |
-| Automatic Changelog | ✅ Yes | ❌ No | ❌ No |
-
----
-
-## 🎉 Conclusion
-
-**ZidiuUI** is a modern, feature-rich UI library designed for Roblox executors. It combines the best features of popular libraries like Rayfield and Kavo while adding unique components like dual sliders, search dropdowns, and full touch support.
-
-**Load it in one line and start building!**
-
-```lua
-local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
-```
+## Notes
+- The **Changelog tab** is automatically created in every window and cannot be removed.
+- Toast notifications can be positioned using `ZidiuUI:SetToastPosition()`.
+- Tooltips appear as popup frames when clicking the "?" button.
+- Keybinds use `ContextActionService` and support modifier keys (Shift, Ctrl, Alt).
+- The ExLabel component creates a **completely independent** window with its own ScreenGui, drag functionality, resizing, minimize/close buttons, and a built-in copy button for the text content. ✅
