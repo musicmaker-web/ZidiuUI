@@ -5,7 +5,7 @@ ZidiuUI is a modern, fully-featured UI framework for Roblox. With its sleek grad
 
 ## Getting Loadstring
 ```lua
-local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
+local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
 ```
 
 ## Creating a UI Window
@@ -176,7 +176,7 @@ ZidiuUI:SetToastPosition("bottom-center")  -- "bottom-center", "bottom-right", "
 ## Complete Demo Script
 ```lua
 -- Load the library
-local ZidiuUI = loadstring(game:HttpGet("https://pastebin.com/raw/e3bYUdLj"))()
+local ZidiuUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/musicmaker-web/ZidiuUI/refs/heads/main/ZidiuUI.lua"))()
 
 -- Create main window
 local Window = ZidiuUI:CreateWindow("ZidiuUI Demo")
